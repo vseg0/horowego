@@ -1,0 +1,59 @@
+# Phony targets
+.PHONY: all build clean rebuild debug make_dependencies
+
+# Load default config
+include ./config/default.cfg
+
+# Toolchain setup
+ifdef TC
+export TOOLCHAIN ?= $(TC)
+else
+export TOOLCHAIN ?= $(DEFAULT_TOOLCHAIN)
+endif
+
+export CFG ?= release
+export VERB ?= 0
+export COVERAGE ?= 0
+export TRM ?= /usr/bin/xterm -e
+export DBG ?= /usr/bin/gdb
+
+# Configuration settings
+ifeq ($(CFG),release)
+CONFIG := build_release
+else
+CONFIG := build_debug
+endif
+
+# Shadow build settings
+CONFIGDIR := $(CONFIG)_$(TOOLCHAIN)
+BINOUTDIR := $(CONFIGDIR)/bin
+OBJOUTDIR := $(CONFIGDIR)/obj
+
+# Load general settings and build information
+include ./config/$(TOOLCHAIN)/general.cfg
+include ./build.info
+
+# Compiler flags
+ifdef CCFLAG
+CFLAGS += $(CCFLAG)
+endif
+
+# Linker flags
+ifdef LDFLAG
+LDFLAGS += $(LDFLAG)
+endif
+
+# Verbose settings
+ifeq ($(VERB),0)
+export SILENT ?= @
+else
+export SILENT ?= 
+endif
+
+# Colouring
+RED:=\\033[31m
+GREEN:=\\033[32m
+YELLOW:=\\033[33m
+CYAN:=\\033[36m
+BRIGHT:=\\033[1m
+RESET:=\\033[0m

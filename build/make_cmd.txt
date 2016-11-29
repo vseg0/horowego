@@ -1,0 +1,29 @@
+# make cmd example
+# make --version
+# make
+# make clean
+
+#цель ... : пререквизит ...
+#        команда
+#        ...
+#        ...
+
+objects = main.o ut_logger.o \
+          ut_module_1.o
+
+myprogram : $(objects)
+        cc -o myprogram $(objects)
+		
+main.o : main.c defs.h
+        cc -c main.c
+		
+ut_logger.o : ut_logger.c defs.h ut_logger.h
+        cc -c command.c
+		
+ut_module_1.o : ut_module_1.c defs.h ut_module_1.h
+        cc -c command.c
+
+clean :
+        rm myprogram $(objects)
+		
+		
