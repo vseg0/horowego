@@ -3,27 +3,72 @@
 # make
 # make clean
 
+
+# make -f makefileexample.mk ( or --f)
+# include or MAKEFILES(envar)
+
 #цель ... : пререквизит ...
 #        команда
 #        ...
 #        ...
 
+##########################
+Присваивание значения переменным
+
+
+Определения переменных обрабатываются следующим образом:
+
+немедленно = отложенно
+немедленно ?= отложенно
+немедленно := немедленно
+немедленно += отложенно или немедленно
+define немедленно
+  отложенно
+endef
+
+
+
+# ifdef, ifeq, ifndef и ifneq
+
+# wildcard characters: `*', `?' и `[...]'
+# $(wildcard *.c)
+# $(patsubst %.c,%.o,$(wildcard *.c)) - превратить список исходных файлов в список объектных файлов
+
+##### Version 1. #####
+#objects = main.o ut_logger.o \
+#          ut_module_1.o
+
+#myprogram : $(objects)
+#        cc -o myprogram $(objects)
+		
+#main.o : main.c ut_const.h
+#        cc -c main.c
+		
+#ut_logger.o : ut_logger.c ut_const.h ut_logger.h
+#        cc -c ut_logger.c
+		
+#ut_module_1.o : ut_module_1.c ut_const.h ut_module_1.h
+#        cc -c ut_module_1.c
+
+#.PHONY : clean
+#clean :
+#        rm myprogram $(objects)
+		
+#неявное правило (implicit rule) для обновления файлов с расширением `.o' из файлов с расширеним `.c', с помощью команды `cc -c'. Например, она бы использовала команду `cc -c main.c -o main.o' для преобразования файла `main.c' в файл `main.o'. Таким образом, можно убрать явное указание команд компиляции из правил, описывающих построение объектных файлов.
+#можем убрать файлы с расширением `.c' из списков пререквизитов объектных файлов.
+
+##### Version 2. #####
 objects = main.o ut_logger.o \
           ut_module_1.o
 
 myprogram : $(objects)
         cc -o myprogram $(objects)
 		
-main.o : main.c defs.h
-        cc -c main.c
-		
-ut_logger.o : ut_logger.c defs.h ut_logger.h
-        cc -c command.c
-		
-ut_module_1.o : ut_module_1.c defs.h ut_module_1.h
-        cc -c command.c
+main.o : ut_const.h
+ut_logger.o : ut_const.h ut_logger.h
+ut_module_1.o : ut_const.h ut_module_1.h
 
+.PHONY : clean
 clean :
         rm myprogram $(objects)
-		
 		
