@@ -9,39 +9,43 @@ C := $(CPPC)
 C_STR := " CXX           "
 endif
 
-#SRC := $(foreach DIR,$(SRCDIRS),$(wildcard $(DIR)/*.$(SRCEXT)))
-#OBJ := $(addprefix $(OBJOUTDIR)/$(TARGET)/,$(subst ../,__/,$(SRC:.$(SRCEXT)=.o)))
-#OUTDIRS := $(foreach DIR,$(SRCDIRS), $(OBJOUTDIR)/$(TARGET)/$(subst ../,__/,$(DIR)))
+SRC := $(foreach DIR,$(SRCDIRS),$(wildcard $(DIR)/*.$(SRCEXT)))
+OBJ := $(addprefix $(OBJOUTDIR)/$(TARGET)/,$(subst ../,__/,$(SRC:.$(SRCEXT)=.o)))
+OUTDIRS := $(foreach DIR,$(SRCDIRS), $(OBJOUTDIR)/$(TARGET)/$(subst ../,__/,$(DIR)))
 
-#ifeq ($(TARGETTYPE),staticlib)
-#LINK = $(AR) rsc $@ $(OBJ)
-#LINK_STR := " AR            "
-#else
-#ifeq ($(TARGETTYPE),executable)
-#LINK = $(C) $(LDFLAGS) -o $@ $(OBJ) $(LIBS)
-#LINK_STR := " LD            "
-#else
-#ifeq ($(TARGETTYPE),shared)
-#LINK = $(C) $(LDFLAGS) -shared -o $@ $(OBJ) $(LIBS)
-#LINK_STR := " LD            "
-#endif
-#endif
-#endif
+ifeq ($(TARGETTYPE),staticlib)
+LINK = $(AR) rsc $@ $(OBJ)
+LINK_STR := " AR            "
+else
+ifeq ($(TARGETTYPE),executable)
+LINK = $(C) $(LDFLAGS) -o $@ $(OBJ) $(LIBS)
+LINK_STR := " LD            "
+else
+ifeq ($(TARGETTYPE),shared)
+LINK = $(C) $(LDFLAGS) -shared -o $@ $(OBJ) $(LIBS)
+LINK_STR := " LD            "
+endif
+endif
+endif
 
-#start_build:
-#	@echo $(BRIGHT)$(WHITE)" BUILD         "$(RESET) $(TARGET)
+start_build:
+	@echo $(BRIGHT)$(WHITE)" BUILD         "$(RESET) $(TARGET)
 
 #$(OUTDIRS): | start_build
-#	@echo $(CYAN)" MD            "$(RESET) $(@)
-#	$(SILENT)mkdir -p $(@)
+$(OUTDIRS): start_build
+	@echo $(CYAN)" MD            "$(RESET) $(@)
+	$(SILENT)mkdir -p $(@)
 
 #$(BINOUTDIR): | start_build
-#	@echo $(CYAN)" MD            "$(RESET) $(BINOUTDIR)
-#	$(SILENT)mkdir -p $(BINOUTDIR)
+$(BINOUTDIR): start_build
+	@echo $(CYAN)" MD            "$(RESET) $(BINOUTDIR)
+	$(SILENT)mkdir -p $(BINOUTDIR)
 
 #directories: | start_build $(OUTDIRS) $(BINOUTDIR)
+directories: start_build $(OUTDIRS) $(BINOUTDIR)
 
 #prebuild: | start_build directories
+prebuild: start_build directories
 
 all: build
 
@@ -55,7 +59,8 @@ $(BINOUTDIR)/$(TARGET): $(DEPENDENCIES) $(OBJ) | directories
 	$(SILENT)$(LINK)
 
 -include $(OBJ:%.o=%.d)
-$(OBJ): | directories
+#$(OBJ): | directories
+$(OBJ): directories
 	@echo $(RED)$(C_STR)$(RESET) $(@F)
 	$(SILENT)$(C) $(CFLAGS) $(foreach header,$(HDRDIRS),-I$(header)) -c $(subst .o,.$(SRCEXT), $(subst __/,../,$(subst $(OBJOUTDIR)/$(TARGET)/,,$@))) -o $@
 

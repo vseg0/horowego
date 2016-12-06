@@ -1,5 +1,5 @@
 # Phony targets
-.PHONY: all build clean rebuild debug make_dependencies
+.PHONY: all build clean rebuild debug make_dependencies start_build
 
 # Load default config
 include ./config/default.cfg

@@ -2,6 +2,10 @@
 # make --version
 # make
 # make clean
+# `-s' и `--silent'
+# `-n' или `--just-print', происходит только лишь отображение команд, без их реального выполнения.
+# `-j' и `--jobs'  - parallel
+# `-i' или `--ignore-errors', ignore error in all cmds
 
 
 # make -f makefileexample.mk ( or --f)
@@ -13,26 +17,66 @@
 #        ...
 
 ##########################
-Присваивание значения переменным
+#Присваивание значения переменным
 
 
-Определения переменных обрабатываются следующим образом:
+#Определения переменных обрабатываются следующим образом:
 
-немедленно = отложенно
-немедленно ?= отложенно
-немедленно := немедленно
-немедленно += отложенно или немедленно
-define немедленно
-  отложенно
-endef
+#немедленно = отложенно
+#немедленно ?= отложенно
+#немедленно := немедленно
+#немедленно += отложенно или немедленно
+#define немедленно
+#  отложенно
+#endef
 
+# variables
+# = рекурсивно вычисляемые (recursively expanded) переменные. (вычисление)
+# := Упрощенно вычисляемые (simply expanded) переменные определяются с помощью(для переопределения)
+# ?= - if not defined.
 
+# ссылка с присваиванием-заменой
+# foo := a.o b.o c.o
+# bar := $(foo:.o=.c)
+
+# VPATH = src:../headers    list of dirs for prerekvizitov separated by :   (foo.o : foo.c   ->   foo.o : src/foo.c)
+# or
+# vpath %.h ../headers
 
 # ifdef, ifeq, ifndef и ifneq
 
 # wildcard characters: `*', `?' и `[...]'
 # $(wildcard *.c)
 # $(patsubst %.c,%.o,$(wildcard *.c)) - превратить список исходных файлов в список объектных файлов
+
+# $@ - target name (for command)
+# $^ - list of prerekv
+# $< - first prerekv (cc -c $(CFLAGS) $< -o $@ e.g. to disable passing headers)
+# $* - parse target substring in name (e.g. to get big or little:     bigoutput littleoutput : %output : text.g   generate text.g -$* > $@ )
+
+# .PHONY - abstract target
+# .SUFFIXES - list of extensions of files that would be used in search of suffix rules
+# .DEFAULT - cmds defined for target .DEFAULT, will be used with all targets, that does not have rules.
+# .PRECIOUS - targets defined in section has special processing(e.g. targets will not be removed on update interruption)
+# .INTERMEDIATE - defined prerekvezits are temp files
+# .SECONDARY - targets in the list are temp files and not removed automatically
+# .DELETE_ON_ERROR - targets will be removed on error/interruption
+# .IGNORE - ignore errors on cmd execution for list of targets
+# .SILENT - silent cmd execution for list of targets
+# .EXPORT_ALL_VARIABLES - export vars for child process
+# .NOTPARALLEL - not parallel execution for all.
+
+# $(filter %.elc,$(files)): %.elc: %.el - disable target *.elc in files
+
+# sources = foo.c bar.c
+# include $(sources:.c=.d)
+
+# Если строка, содержащая команду, начинается с символа `@', печать этой команды не производится. (@echo About to make distribution files)
+
+# to disable error output in case of error (use - in cmd)
+# clean:
+#        -rm -f *.o
+
 
 ##### Version 1. #####
 #objects = main.o ut_logger.o \

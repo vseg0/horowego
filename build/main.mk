@@ -3,7 +3,7 @@ include makefile.tools
 
 #SRCDIR = ut_src
 
-TARGET := UT
+TARGET := UT_MAIN
 
 all: build
 

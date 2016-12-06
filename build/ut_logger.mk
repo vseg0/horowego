@@ -4,19 +4,22 @@ include makefile.tools
 # Target settings
 LANG := c
 #LANG := c++
-#TARGET := ut_logger
-#TARGETTYPE := executable
+TARGET := ut_logger
+TARGETTYPE := executable
 
 #TARGET := libut_logger.a
 #TARGETTYPE := staticlib
 
 #DEPENDENCIES := $(BINOUTDIR)/libXXX.a
 
-SRCDIRS :=  ../src/ut_logger/src                        \
-            ../src/ut_logger/src
+#SRCDIRS :=  ../src/ut_logger/src                        \
+#            ../src/ut_logger/src
+SRCDIRS :=  ../src/ut_logger/src
 
-HDRDIRS :=  ../src/ut_logger/inc	                    \
-            ../src/ut_logger/inc
+#HDRDIRS :=  ../src/ut_logger/inc	                    \
+#            ../src/ut_logger/inc
+
+HDRDIRS :=  ../src/ut_logger/inc
 
 include ./config/$(TOOLCHAIN)/ut_logger.cfg
 
