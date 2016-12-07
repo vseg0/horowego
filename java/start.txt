@@ -1,0 +1,5 @@
+# compile
+javac mainApp.java
+
+#run
+java -Xmx128M -Xms16M mainApp
