@@ -1,6 +1,7 @@
 ECHO OFF
 REM compile
 javac MySingleton.java
+javac MyRunnable.java
 javac MainApp.java
 
 REM run

@@ -48,7 +48,7 @@ class MyRunnable implements Runnable {
 
 }
 
-public class TestThread {
+/*public class TestThread {
 
    public static void main(String args[]) {
       MyRunnable R1 = new MyRunnable( "tread_1");
@@ -57,4 +57,4 @@ public class TestThread {
       MyRunnable R2 = new MyRunnable( "thread_2");
       R2.start();
    }   
-}
+}*/
